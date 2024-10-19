@@ -1,0 +1,540 @@
+about:
+  date: October 19, 2024 23:15:11
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+entities:
+  Addres:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: customer_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: street
+      required: true
+      template: text
+      type: VARCHAR
+    - name: city
+      required: true
+      template: text
+      type: VARCHAR
+    - name: state
+      required: true
+      template: text
+      type: VARCHAR
+    - name: zip_code
+      required: true
+      template: text
+      type: VARCHAR
+    - name: is_billing
+      required: true
+      template: integer
+      type: INTEGER
+    description: Represents an address associated with a customer, can be billing
+      or shipping.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Represents an address associated with a customer, can be billing or
+      shipping.
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    type: Addres
+  Customer:
+    columns:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR
+    - name: credit_limit
+      required: true
+      template: real
+      type: FLOAT
+    - name: balance
+      required: true
+      template: real
+      type: FLOAT
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Represents a customer with personal and credit information.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: name
+    home_template: home_template.html
+    info_list: Represents a customer with personal and credit information.
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - customer_id
+      name: AddresList
+      resource: Addres
+    - direction: tomany
+      fks:
+      - customer_id
+      name: OrderList
+      resource: Order
+    - direction: tomany
+      fks:
+      - customer_id
+      name: PaymentList
+      resource: Payment
+    - direction: tomany
+      fks:
+      - customer_id
+      name: ReviewList
+      resource: Review
+    type: Customer
+  Item:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: order_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: product_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: quantity
+      required: true
+      template: integer
+      type: INTEGER
+    - name: unit_price
+      required: true
+      template: real
+      type: FLOAT
+    - name: amount
+      required: true
+      template: real
+      type: FLOAT
+    description: Represents an item in an order, linked to a product.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Represents an item in an order, linked to a product.
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - order_id
+      name: order
+      resource: Order
+    - direction: toone
+      fks:
+      - product_id
+      name: product
+      resource: Product
+    type: Item
+  Order:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: customer_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: amount_total
+      required: true
+      template: real
+      type: FLOAT
+    - name: notes
+      template: text
+      type: TEXT
+    - name: date_created
+      template: date
+      type: DATETIME
+    - name: date_shipped
+      template: date
+      type: DATETIME
+    description: Represents an order created by a customer, containing multiple items.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Represents an order created by a customer, containing multiple items.
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - order_id
+      name: ItemList
+      resource: Item
+    - direction: tomany
+      fks:
+      - order_id
+      name: OrderStatuList
+      resource: OrderStatu
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    type: Order
+  OrderStatu:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: order_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: status
+      required: true
+      template: text
+      type: VARCHAR
+    description: Represents the status of an order.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Represents the status of an order.
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - order_id
+      name: order
+      resource: Order
+    type: OrderStatu
+  Payment:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: customer_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: date
+      template: date
+      type: DATETIME
+    - name: amount
+      required: true
+      template: real
+      type: FLOAT
+    description: Represents a payment made by a customer towards their balance.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Represents a payment made by a customer towards their balance.
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    type: Payment
+  Product:
+    columns:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR
+    - name: unit_price
+      required: true
+      template: real
+      type: FLOAT
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Represents a product available for purchase.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: name
+    home_template: home_template.html
+    info_list: Represents a product available for purchase.
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - product_id
+      name: ItemList
+      resource: Item
+    - direction: tomany
+      fks:
+      - product_id
+      name: ProductPromotionList
+      resource: ProductPromotion
+    - direction: tomany
+      fks:
+      - product_id
+      name: ReviewList
+      resource: Review
+    - direction: tomany
+      fks:
+      - product_id
+      name: SupplierProductList
+      resource: SupplierProduct
+    type: Product
+  ProductPromotion:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: product_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: promotion_id
+      required: true
+      template: integer
+      type: INTEGER
+    description: Junction table linking promotions to the products affected by them.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Junction table linking promotions to the products affected by them.
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - product_id
+      name: product
+      resource: Product
+    - direction: toone
+      fks:
+      - promotion_id
+      name: promotion
+      resource: Promotion
+    type: ProductPromotion
+  Promotion:
+    columns:
+    - label: ' description*'
+      name: description
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR
+    - name: discount_percentage
+      required: true
+      template: real
+      type: FLOAT
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Represents a promotion associated with products or orders.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: description
+    home_template: home_template.html
+    info_list: Represents a promotion associated with products or orders.
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - promotion_id
+      name: ProductPromotionList
+      resource: ProductPromotion
+    type: Promotion
+  Review:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: customer_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: product_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: rating
+      required: true
+      template: integer
+      type: INTEGER
+    - name: comment
+      template: text
+      type: TEXT
+    description: Represents a review by a customer for a product.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Represents a review by a customer for a product.
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    - direction: toone
+      fks:
+      - product_id
+      name: product
+      resource: Product
+    type: Review
+  Supplier:
+    columns:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Represents a supplier that provides products.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: name
+    home_template: home_template.html
+    info_list: Represents a supplier that provides products.
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - supplier_id
+      name: SupplierProductList
+      resource: SupplierProduct
+    type: Supplier
+  SupplierProduct:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: product_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: supplier_id
+      required: true
+      template: integer
+      type: INTEGER
+    description: Junction table linking suppliers to provided products.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Junction table linking suppliers to provided products.
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - product_id
+      name: product
+      resource: Product
+    - direction: toone
+      fks:
+      - supplier_id
+      name: supplier
+      resource: Supplier
+    type: SupplierProduct
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    edit_on_mode: dblclick
+    include_translation: false
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    mode: tab
+    pick_style: list
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: false

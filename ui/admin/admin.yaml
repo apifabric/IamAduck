@@ -1,0 +1,364 @@
+about:
+  date: October 19, 2024 23:15:11
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+info:
+  number_relationships: 12
+  number_tables: 12
+info_toggle_checked: true
+resources:
+  Addres:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: customer_id
+      required: true
+    - name: street
+      required: true
+    - name: city
+      required: true
+    - name: state
+      required: true
+    - name: zip_code
+      required: true
+    - name: is_billing
+      required: true
+    description: Represents an address associated with a customer, can be billing
+      or shipping.
+    info_list: Represents an address associated with a customer, can be billing or
+      shipping.
+    tab_groups:
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    type: Addres
+    user_key: id
+  Customer:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: credit_limit
+      required: true
+    - name: balance
+      required: true
+    - name: id
+    description: Represents a customer with personal and credit information.
+    info_list: Represents a customer with personal and credit information.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - customer_id
+      name: AddresList
+      resource: Addres
+    - direction: tomany
+      fks:
+      - customer_id
+      name: OrderList
+      resource: Order
+    - direction: tomany
+      fks:
+      - customer_id
+      name: PaymentList
+      resource: Payment
+    - direction: tomany
+      fks:
+      - customer_id
+      name: ReviewList
+      resource: Review
+    type: Customer
+    user_key: name
+  Item:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: order_id
+      required: true
+    - name: product_id
+      required: true
+    - name: quantity
+      required: true
+    - name: unit_price
+      required: true
+    - name: amount
+      required: true
+    description: Represents an item in an order, linked to a product.
+    info_list: Represents an item in an order, linked to a product.
+    tab_groups:
+    - direction: toone
+      fks:
+      - order_id
+      name: order
+      resource: Order
+    - direction: toone
+      fks:
+      - product_id
+      name: product
+      resource: Product
+    type: Item
+    user_key: id
+  Order:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: customer_id
+      required: true
+    - name: amount_total
+      required: true
+    - name: notes
+    - name: date_created
+    - name: date_shipped
+    description: Represents an order created by a customer, containing multiple items.
+    info_list: Represents an order created by a customer, containing multiple items.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - order_id
+      name: ItemList
+      resource: Item
+    - direction: tomany
+      fks:
+      - order_id
+      name: OrderStatuList
+      resource: OrderStatu
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    type: Order
+    user_key: id
+  OrderStatu:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: order_id
+      required: true
+    - name: status
+      required: true
+    description: Represents the status of an order.
+    info_list: Represents the status of an order.
+    tab_groups:
+    - direction: toone
+      fks:
+      - order_id
+      name: order
+      resource: Order
+    type: OrderStatu
+    user_key: id
+  Payment:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: customer_id
+      required: true
+    - name: date
+    - name: amount
+      required: true
+    description: Represents a payment made by a customer towards their balance.
+    info_list: Represents a payment made by a customer towards their balance.
+    tab_groups:
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    type: Payment
+    user_key: id
+  Product:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: unit_price
+      required: true
+    - name: id
+    description: Represents a product available for purchase.
+    info_list: Represents a product available for purchase.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - product_id
+      name: ItemList
+      resource: Item
+    - direction: tomany
+      fks:
+      - product_id
+      name: ProductPromotionList
+      resource: ProductPromotion
+    - direction: tomany
+      fks:
+      - product_id
+      name: ReviewList
+      resource: Review
+    - direction: tomany
+      fks:
+      - product_id
+      name: SupplierProductList
+      resource: SupplierProduct
+    type: Product
+    user_key: name
+  ProductPromotion:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: product_id
+      required: true
+    - name: promotion_id
+      required: true
+    description: Junction table linking promotions to the products affected by them.
+    info_list: Junction table linking promotions to the products affected by them.
+    tab_groups:
+    - direction: toone
+      fks:
+      - product_id
+      name: product
+      resource: Product
+    - direction: toone
+      fks:
+      - promotion_id
+      name: promotion
+      resource: Promotion
+    type: ProductPromotion
+    user_key: id
+  Promotion:
+    attributes:
+    - label: ' description*'
+      name: description
+      required: true
+      search: true
+      sort: true
+    - name: discount_percentage
+      required: true
+    - name: id
+    description: Represents a promotion associated with products or orders.
+    info_list: Represents a promotion associated with products or orders.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - promotion_id
+      name: ProductPromotionList
+      resource: ProductPromotion
+    type: Promotion
+    user_key: description
+  Review:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: customer_id
+      required: true
+    - name: product_id
+      required: true
+    - name: rating
+      required: true
+    - name: comment
+    description: Represents a review by a customer for a product.
+    info_list: Represents a review by a customer for a product.
+    tab_groups:
+    - direction: toone
+      fks:
+      - customer_id
+      name: customer
+      resource: Customer
+    - direction: toone
+      fks:
+      - product_id
+      name: product
+      resource: Product
+    type: Review
+    user_key: id
+  Supplier:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: id
+    description: Represents a supplier that provides products.
+    info_list: Represents a supplier that provides products.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - supplier_id
+      name: SupplierProductList
+      resource: SupplierProduct
+    type: Supplier
+    user_key: name
+  SupplierProduct:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: product_id
+      required: true
+    - name: supplier_id
+      required: true
+    description: Junction table linking suppliers to provided products.
+    info_list: Junction table linking suppliers to provided products.
+    tab_groups:
+    - direction: toone
+      fks:
+      - product_id
+      name: product
+      resource: Product
+    - direction: toone
+      fks:
+      - supplier_id
+      name: supplier
+      resource: Supplier
+    type: SupplierProduct
+    user_key: id
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    detail_mode: tab
+    edit_on_mode: dblclick
+    include_translation: 'false'
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    new_mode: dialog
+    pick_style: list
+    row_height: small,
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: 'false'

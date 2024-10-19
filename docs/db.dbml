@@ -1,0 +1,103 @@
+// Copy this text, paste to https://dbdiagram.io/d
+// Or, https://databasediagram.com/app
+
+Table Addres {
+    id INTEGER [primary key]
+    customer_id INTEGER 
+    street VARCHAR 
+    city VARCHAR 
+    state VARCHAR 
+    zip_code VARCHAR 
+    is_billing INTEGER 
+    }
+
+Table Customer {
+    id INTEGER [primary key]
+    name VARCHAR 
+    credit_limit FLOAT 
+    balance FLOAT 
+    }
+
+Table Item {
+    id INTEGER [primary key]
+    order_id INTEGER 
+    product_id INTEGER 
+    quantity INTEGER 
+    unit_price FLOAT 
+    amount FLOAT 
+    }
+
+Table Order {
+    id INTEGER [primary key]
+    customer_id INTEGER 
+    date_created DATETIME 
+    date_shipped DATETIME 
+    amount_total FLOAT 
+    notes TEXT 
+    }
+
+Table Product {
+    id INTEGER [primary key]
+    name VARCHAR 
+    unit_price FLOAT 
+    }
+
+Table OrderStatu {
+    id INTEGER [primary key]
+    order_id INTEGER 
+    status VARCHAR 
+    }
+
+Table Payment {
+    id INTEGER [primary key]
+    customer_id INTEGER 
+    date DATETIME 
+    amount FLOAT 
+    }
+
+Table ProductPromotion {
+    id INTEGER [primary key]
+    product_id INTEGER 
+    promotion_id INTEGER 
+    }
+
+Table Promotion {
+    id INTEGER [primary key]
+    description VARCHAR 
+    discount_percentage FLOAT 
+    }
+
+Table Review {
+    id INTEGER [primary key]
+    customer_id INTEGER 
+    product_id INTEGER 
+    rating INTEGER 
+    comment TEXT 
+    }
+
+Table Supplier {
+    id INTEGER [primary key]
+    name VARCHAR 
+    }
+
+Table SupplierProduct {
+    id INTEGER [primary key]
+    supplier_id INTEGER 
+    product_id INTEGER 
+    }
+
+
+
+// Relationships
+    Ref: Addres.(customer_id) < Customer.(id)
+    Ref: Item.(order_id) < Order.(id)
+    Ref: Item.(product_id) < Product.(id)
+    Ref: Order.(customer_id) < Customer.(id)
+    Ref: OrderStatu.(order_id) < Order.(id)
+    Ref: Payment.(customer_id) < Customer.(id)
+    Ref: ProductPromotion.(product_id) < Product.(id)
+    Ref: ProductPromotion.(promotion_id) < Promotion.(id)
+    Ref: Review.(customer_id) < Customer.(id)
+    Ref: Review.(product_id) < Product.(id)
+    Ref: SupplierProduct.(product_id) < Product.(id)
+    Ref: SupplierProduct.(supplier_id) < Supplier.(id)
